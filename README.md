@@ -25,6 +25,7 @@ cd pydtw
 pip3 install -e .
 cd ..
 ```
+Note: this works with Python 3.6 but not with 3.9 (where the pip build will fail)
 
 Then compute the dtw matrix for **Coffee** with
 ```
