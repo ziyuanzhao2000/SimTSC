@@ -14,7 +14,8 @@ multivariate_datasets = ['CharacterTrajectories', 'ECG', 'KickvsPunch', 'NetFlow
 
 def train(X, y, train_idx, test_idx, distances, device, logger, K, alpha):
     nb_classes = len(np.unique(y, axis=0))
-
+    print(nb_classes, len(train_idx), len(test_idx))
+    exit(1)
     input_size = X.shape[1]
 
     model = SimTSC(input_size, nb_classes)
