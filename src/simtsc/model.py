@@ -110,7 +110,7 @@ def compute_accuracy(model, X, y, adj, K, alpha, loader, device, other_idx, othe
 class SimTSC(nn.Module):
     def __init__(self, input_size, nb_classes, num_layers=1, n_feature_maps=64, dropout=0.5):
         super(SimTSC, self).__init__()
-        self.device = 'cpu'
+        self.device = 'cuda'
 
         self.num_layers = num_layers
 
