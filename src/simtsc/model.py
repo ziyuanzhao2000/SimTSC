@@ -25,7 +25,8 @@ class SimTSCTrainer:
         self.alpha = alpha
 
         train_batch_size = min(batch_size//2, len(train_idx))
-        other_idx = np.array([i for i in range(len(X)) if i not in train_idx])
+        # unlabelled data cannot come from test set! (we want inductive learning by the author's def)
+        other_idx = np.array([i for i in range(len(X)) if (i not in train_idx) and (i not in test_idx)])
         other_batch_size = min(batch_size - train_batch_size, len(other_idx))
         train_dataset = Dataset(train_idx)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=train_batch_size, shuffle=True, num_workers=1)
@@ -68,6 +69,7 @@ class SimTSCTrainer:
                 best_acc = acc
                 torch.save(model.state_dict(), file_path)
             if report_test:
+                # this accuracy is based on the training set, which is very small if doing 1-shot learning!
                 test_acc = compute_accuracy(model, self.X, self.y, self.adj, self.K, self.alpha, test_loader, self.device, other_idx_test, other_batch_size_test)
                 self.logger.log('--> Epoch {}: loss {:5.4f}; accuracy: {:5.4f}; best accuracy: {:5.4f}; test accuracy: {:5.4f}'.format(epoch, loss.item(), acc, best_acc, test_acc))
             else:
@@ -108,7 +110,7 @@ def compute_accuracy(model, X, y, adj, K, alpha, loader, device, other_idx, othe
 class SimTSC(nn.Module):
     def __init__(self, input_size, nb_classes, num_layers=1, n_feature_maps=64, dropout=0.5):
         super(SimTSC, self).__init__()
-        self.device = 'cuda:0'
+        self.device = 'cpu'
 
         self.num_layers = num_layers
 
