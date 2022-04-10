@@ -20,7 +20,7 @@ def train(X, y, train_idx, test_idx, distances, device, logger, K, alpha):
     model = model.to(device)
     trainer = SimTSCTrainer(device, logger)
 
-    model = trainer.fit(model, X, y, train_idx, distances, K, alpha)
+    model = trainer.fit(model, X, y, train_idx, distances, K, alpha, test_idx)
     acc = trainer.test(model, test_idx)
 
     return acc
